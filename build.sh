@@ -7,4 +7,4 @@ python3 resources/build.py
 go build
 
 # run 
-./talkapply
+./talkapply --port=54321

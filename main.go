@@ -1,10 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func GetIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -35,11 +37,16 @@ func GetBrand(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func main() {
 
+	var port int
+	flag.IntVar(&port, "port", 54321, "Port to listen to.")
+	flag.Parse()
+
 	router := httprouter.New()
 	router.GET("/", GetIndex)
 	router.GET("/styles.css", GetStylesheet)
 	router.GET("/scripts.js", GetScript)
 	router.GET("/brand.svg", GetBrand)
 
-	log.Fatal(http.ListenAndServe(":54321", router))
+	fmt.Printf("\nListening on port %d\n", port)
+	log.Fatal(http.ListenAndServe(":" + strconv.Itoa(port), router))
 }
