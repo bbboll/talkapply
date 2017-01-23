@@ -9,6 +9,7 @@ import os
 from css_html_js_minify import html_minify, js_minify, css_minify
 import tempfile
 import binascii
+import html
 
 def isJs(filename):
 	return filename.endswith(".js")
@@ -20,7 +21,7 @@ def isSass(filename):
 	return filename.endswith((".scss", ".sass"))
 
 def isTpl(filename):
-	return filename.endswith(".tpl")
+	return filename.endswith(".tpl.js")
 
 def isHtml(filename):
 	return filename.endswith(".html")
@@ -32,6 +33,13 @@ def isSvg(filename):
 def decodeString(s):
 	return binascii.hexlify(s.encode("utf-8")).decode('utf-8')
 
+# merci http://stackoverflow.com/a/19053800
+def toCamelCase(snake_str):
+    components = snake_str.split('_')
+    # We capitalize the first letter of each component except the first one
+    # with the 'title' method and join them together.
+    return components[0] + "".join(x.title() for x in components[1:])
+
 # def minifyJsFile(filename):
 
 
@@ -42,6 +50,7 @@ if __name__ == "__main__":
 		
 		"index.html": ["templates/index.html"],
 		"scripts.js": ["scripts/jquery.js", "scripts/backbone.js"],
+		"templates.tpl.js" : ["templates/overview.html"],
 		"styles.css": ["styles/normalize.css", "styles/spinkit.css", "styles/milligram.css", "styles/custom.css"],
 		"brand.svg" : ["images/brand.svg"]
 	}
@@ -83,8 +92,30 @@ if __name__ == "__main__":
 
 				fh.close()
 
+		# generate template output (this one is a litte bit weird and needs a clean up... :| )
+		# TODO: support more than one level in the file system
+		elif isTpl(outputFileName):
+			print("Building template js file '", outputFileName ,"'")
+			output += "window._tpls = {"
+
+			for file in contentFiles:
+				print("   ", file)
+				fh = open(os.path.join(resDir, file), "r")
+				name = os.path.splitext(file)[0] # filename without extension to be used as object index
+
+				if isHtml(file):
+					output += toCamelCase(name) + ": "
+					output += "\"" + html_minify(fh.read().replace('"','\\"')) + "\",\n"
+				else:
+					print("  \033[91m\033[1mERROR: NO VALID FILE EXTENSION. SUPPORTED: .html\033[0m")
+
+				fh.close()
+
+			output += "};"
+
+
 		# generate javascript output
-		if isJs(outputFileName):
+		elif isJs(outputFileName):
 			print("Building javascript file '", outputFileName ,"'")
 
 			for file in contentFiles:
@@ -99,7 +130,7 @@ if __name__ == "__main__":
 				fh.close()
 
 		# generate css output (Input can be css and sass)
-		if isCss(outputFileName):
+		elif isCss(outputFileName):
 			print("Building css file '", outputFileName ,"'")
 
 			for file in contentFiles:
@@ -118,7 +149,7 @@ if __name__ == "__main__":
 				fh.close()
 
 		# generate css output (Input can be css and sass)
-		if isSvg(outputFileName):
+		elif isSvg(outputFileName):
 			print("Building svg file '", outputFileName ,"'")
 
 			for file in contentFiles:
