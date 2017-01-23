@@ -4,7 +4,8 @@ Students form groups by themself to work on several projects they can choose fro
 You don't want 20 groups working on the same project, while others are left over. 
 talkapply provides a minimal web app for signing up a group to a project. 
 Once signed up, the project is not available for others anymore.
-In the end you get a 
+
+![Sample image of the login window](http://i.imgur.com/CDJ7vWp.png)
 
 ## How can I use it?
 *I don't host any public talkapply server at the moment. Also I would not recommend use it in production at the moment.*
