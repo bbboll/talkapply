@@ -2,3 +2,22 @@
 body {
   font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
 }
+
+/* Remove padding if the button gets a fixed width */
+.no-padding { padding: 0 !important; }
+
+a { border-bottom: 1px #9b4dca dashed; }
+p.small { font-size: 0.8em; }
+
+.container { width: 400px; }
+@media (max-width: 40.0rem) { .container { width: 100%; } }
+.card { margin-top: 5em; }
+
+.mt5 { margin-top: 5em; }
+
+img#brand {
+	width: 55%; 
+}
+
+#login-number { display: block; width: 74%; float: left; margin-right: 1%; }
+#login-button { display: block; width: 25%;  }
