@@ -39,7 +39,7 @@ if __name__ == "__main__":
 		
 		"index.html": ["templates/index.html"],
 		"scripts.js": ["scripts/jquery.js", "scripts/backbone.js"],
-		"styles.css": ["styles/normalize.css", "styles/milligram.css", "styles/custom.css"]
+		"styles.css": ["styles/normalize.css", "styles/spinkit.css", "styles/milligram.css", "styles/custom.css"]
 	}
 
 	# go code to produce
