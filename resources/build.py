@@ -25,6 +25,9 @@ def isTpl(filename):
 def isHtml(filename):
 	return filename.endswith(".html")
 
+def isSvg(filename):
+	return filename.endswith(".svg")
+
 # convert a string to a hex representation (\xNN\xNN\xNN...)
 def decodeString(s):
 	return binascii.hexlify(s.encode("utf-8")).decode('utf-8')
@@ -39,7 +42,8 @@ if __name__ == "__main__":
 		
 		"index.html": ["templates/index.html"],
 		"scripts.js": ["scripts/jquery.js", "scripts/backbone.js"],
-		"styles.css": ["styles/normalize.css", "styles/spinkit.css", "styles/milligram.css", "styles/custom.css"]
+		"styles.css": ["styles/normalize.css", "styles/spinkit.css", "styles/milligram.css", "styles/custom.css"],
+		"brand.svg" : ["images/brand.svg"]
 	}
 
 	# go code to produce
@@ -110,6 +114,24 @@ if __name__ == "__main__":
 
 				else:
 					print("  \033[91m\033[1mERROR: NO VALID FILE EXTENSION. SUPPORTED: .css\033[0m")
+				
+				fh.close()
+
+		# generate css output (Input can be css and sass)
+		if isSvg(outputFileName):
+			print("Building svg file '", outputFileName ,"'")
+
+			for file in contentFiles:
+				print("   ", file)
+				fh = open(os.path.join(resDir, file), "r")
+				
+				if isSvg(file):
+					# Minifying is a little bit buggy
+					# output += html_minify(fh.read()) 
+					output += fh.read()
+
+				else:
+					print("  \033[91m\033[1mERROR: NO VALID FILE EXTENSION. SUPPORTED: .svg\033[0m")
 				
 				fh.close()
 
