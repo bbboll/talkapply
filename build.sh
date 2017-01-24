@@ -10,4 +10,4 @@ go fmt
 go build
 
 # run 
-./talkapply --port=54321
+./talkapply --port=54321 --seconds=30 --file="talkapply.backup"

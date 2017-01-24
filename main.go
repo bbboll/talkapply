@@ -43,11 +43,15 @@ func GetBrand(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func main() {
 
-	initStorage()
+	var port, seconds int
+	var filename string
 
-	var port int
 	flag.IntVar(&port, "port", 54321, "Port to listen to.")
+	flag.StringVar(&filename, "file", "./talkapply.json", "Backup file. (see: seconds)")
+	flag.IntVar(&seconds, "seconds", 5, "Every x seconds a backup of all in memory data is created on disk.")
 	flag.Parse()
+
+	initStorage(seconds, filename)
 
 	router := httprouter.New()
 	router.GET("/", GetIndex)

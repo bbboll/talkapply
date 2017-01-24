@@ -114,20 +114,24 @@ func NewSubject(title string) *Subject {
 }
 
 type Storage struct {
-	Server *Server
+	Server   *Server
+	filename string
+	seconds  int
 }
 
-func initStorage() *Storage {
+func initStorage(seconds int, filename string) *Storage {
 
 	rand.Seed(time.Now().UTC().UnixNano())
 	strg := &Storage{
-		Server: &Server{},
+		Server:   &Server{},
+		filename: filename,
+		seconds:  seconds,
 	}
 
-	if crashed() {
+	if strg.crashed() {
 		fmt.Printf("talkapply crashed and will now start restoring the data")
 
-		j, err := ioutil.ReadFile("./talkapply.json")
+		j, err := ioutil.ReadFile(filename)
 
 		// if the file is broken someone fucked up
 		if err != nil {
@@ -147,36 +151,36 @@ func initStorage() *Storage {
 }
 
 // checks if the talkapply crashed and needs to restore the data to the ram
-func crashed() bool {
-	if _, err := os.Stat("./talkapply.json"); err == nil {
+func (strg *Storage) crashed() bool {
+	if _, err := os.Stat(strg.filename); err == nil {
 		return true
 	}
 	return false
 }
 
 // save the in memory values to json file
-func (s *Storage) save() {
+func (strg *Storage) save() {
 
-	s.Server.m.Lock()
-	j, err := json.Marshal(s.Server)
-
-	if err != nil {
-		fmt.Println("Failed to save storage to disk. \n%s", err)
-	}
-
-	err = ioutil.WriteFile("./talkapply.json", j, 0644)
+	strg.Server.m.Lock()
+	j, err := json.Marshal(strg.Server)
 
 	if err != nil {
 		fmt.Println("Failed to save storage to disk. \n%s", err)
 	}
 
-	s.Server.m.Unlock()
+	err = ioutil.WriteFile(strg.filename, j, 0644)
+
+	if err != nil {
+		fmt.Println("Failed to save storage to disk. \n%s", err)
+	}
+
+	strg.Server.m.Unlock()
 	fmt.Println("Saved memory to disk.")
 }
 
-func (s *Storage) loop() {
+func (strg *Storage) loop() {
 	for {
-		s.save()
-		time.Sleep(5 * time.Second)
+		strg.save()
+		time.Sleep(time.Duration(strg.seconds) * time.Second)
 	}
 }
