@@ -45,6 +45,9 @@ func GetBrand(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func main() {
 
+
+	initStorage()
+
 	var port int
 	flag.IntVar(&port, "port", 54321, "Port to listen to.")
 	flag.Parse()
