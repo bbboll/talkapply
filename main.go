@@ -41,10 +41,7 @@ func GetBrand(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, string(file))
 }
 
-
-
 func main() {
-
 
 	initStorage()
 
@@ -60,5 +57,5 @@ func main() {
 	router.GET("/brand.svg", GetBrand)
 
 	fmt.Printf("\nListening on port %d\n", port)
-	log.Fatal(http.ListenAndServe(":" + strconv.Itoa(port), router))
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(port), router))
 }

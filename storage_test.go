@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"testing"
 	"github.com/Pallinder/go-randomdata"
 	"io/ioutil"
+	"testing"
 	// "os"
 	"strconv"
 )
@@ -30,10 +30,10 @@ func BenchmarkJsonMarshal(b *testing.B) {
 
 			// add subjects
 			for k := 0; k < 10; k++ {
-				s := g.AddSubject(randomdata.LastName() + " " + strconv.Itoa(randomdata.Number(13,985)) + " " + randomdata.SillyName())
-			
+				s := g.AddSubject(randomdata.LastName() + " " + strconv.Itoa(randomdata.Number(13, 985)) + " " + randomdata.SillyName())
+
 				// add people to 10% of the subject
-				if randomdata.Number(0,1000) < 100 {
+				if randomdata.Number(0, 1000) < 100 {
 					s.Locked = true
 					s.People = fmt.Sprintf("%s, %s, %s", randomdata.SillyName(), randomdata.SillyName(), randomdata.SillyName())
 				}

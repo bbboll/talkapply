@@ -10,7 +10,7 @@ import (
 	"math/rand"
 	"os"
 	"sync"
-    "time"
+	"time"
 )
 
 type Token struct {
@@ -28,12 +28,12 @@ func (t *Token) Verify(s string) error {
 func NewToken() (*Token, string) {
 
 	bytes := make([]byte, 10)
-    for i := 0; i < 10; i++ {
-        bytes[i] = byte(rand.Intn(57 - 48) + 48)
-    }
+	for i := 0; i < 10; i++ {
+		bytes[i] = byte(rand.Intn(57-48) + 48)
+	}
 
 	t := &Token{}
-	t.Value = hashStringForToken(string(bytes));
+	t.Value = hashStringForToken(string(bytes))
 	return t, string(bytes)
 }
 
@@ -44,16 +44,15 @@ func hashStringForToken(s string) string {
 }
 
 type Server struct {
-
 	adminTokens []*Token
-	Projects []*Project `json:"projects"`
-	m sync.Mutex
+	Projects    []*Project `json:"projects"`
+	m           sync.Mutex
 }
 
 // Adds a new admin token to the server and returns the un-hashed version
 func (s *Server) AddToken() string {
-	t,p := NewToken()
-	s.adminTokens = append(s.adminTokens, t)	
+	t, p := NewToken()
+	s.adminTokens = append(s.adminTokens, t)
 	return p
 }
 
@@ -65,9 +64,9 @@ func (s *Server) AddProject(title string) *Project {
 }
 
 type Project struct {
-	Title string
-	Groupings []*Grouping `json:"groupings"`
-	AccessNumber uint64 
+	Title        string
+	Groupings    []*Grouping `json:"groupings"`
+	AccessNumber uint64
 }
 
 func NewProject(title string) *Project {
@@ -83,8 +82,8 @@ func (p *Project) AddGrouping(title string) *Grouping {
 }
 
 type Grouping struct {
-	Title string
-	Subjects []*Subject `json:"subjects"`
+	Title     string
+	Subjects  []*Subject `json:"subjects"`
 	SortIndex uint8
 }
 
@@ -101,21 +100,21 @@ func (g *Grouping) AddSubject(title string) *Subject {
 }
 
 type Subject struct {
-	Title string `json:"title"`
-	People string `json:"people"`
-	Locked bool `json:"locked"`
+	Title            string `json:"title"`
+	People           string `json:"people"`
+	Locked           bool   `json:"locked"`
 	lastModification uint64 `json:"lastModification"`
 }
 
 func NewSubject(title string) *Subject {
 	return &Subject{
-		Title: title,
+		Title:  title,
 		Locked: false,
 	}
 }
 
 type Storage struct {
-	Server *Server	
+	Server *Server
 }
 
 func initStorage() *Storage {
@@ -133,13 +132,13 @@ func initStorage() *Storage {
 		// if the file is broken someone fucked up
 		if err != nil {
 			fmt.Println(err.Error())
-        	os.Exit(100)
+			os.Exit(100)
 		}
 
 		err = json.Unmarshal(j, strg.Server)
 		if err != nil {
 			fmt.Println(err.Error())
-        	os.Exit(101)
+			os.Exit(101)
 		}
 	}
 
@@ -158,7 +157,7 @@ func crashed() bool {
 // save the in memory values to json file
 func (s *Storage) save() {
 
-	s.Server.m.Lock()	
+	s.Server.m.Lock()
 	j, err := json.Marshal(s.Server)
 
 	if err != nil {
