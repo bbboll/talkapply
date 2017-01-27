@@ -1,21 +1,19 @@
 # talkapply
-talkapply is designed to be a simple tool that helps you dealing with a typical situation at university: 
-Students form groups by themself to work on several projects they can choose from. 
-You don't want 20 groups working on the same project, while others are left over. 
-talkapply provides a minimal web app for signing up a group to a project. 
-Once signed up, the project is not available for others anymore.
+talkapply is a simple, self-contained tool to solve an organizational problem at university:
+Projects need to be assigned to students in a first-come-first-serve fashion.
+talkapply provides a minimal web app for students to pick a project. Once picked, the project will no longer be available.
 
 ![Sample image of the login window](http://i.imgur.com/CDJ7vWp.png)
 
 ## How can I use it?
-*I don't host any public talkapply server at the moment. Also I would not recommend use it in production at the moment.*
+*I don't recommend hosting any public talkapply servers at the moment.*
 
-### Single file
-I hated it to upload 175684359 lines of dependencies, way too many images and then maintain the database when I worked with PHP/Laravel. 
-Because of that **you can just put a single executable that includes everything it needs** on your server. It won't download anything.
-
-### Storage driver
-You don't need any database system installed on your system. talkapply holds all data in the memory and will create several files for a permanent storage.
+## Features
+- **Single binary, no dependencies.**
+    I always hated uploading 175684359 lines of dependencies and maintaining a database whenever I wanted to do anything with PHP/Laravel. 
+    Instead, with talkapply **you can just put a single executable that includes everything it needs** on your server. It won't download anything.
+- **No external storage driver**
+    You don't need any database. talkapply caches temporary data in memory and will regularly flush it to files for permanent storage.
 
 ### Building
 ``` 
@@ -23,7 +21,7 @@ $ resources/build.py
 $ go build
 ```
 
-*build.py* creates a golang file resources.go containing all resources as hex strings to be embed in the binary.
+*build.py* creates a golang file resources.go that contains all resources (markup, js,...) as hex strings. Building the project will embed them in the binary.
 
 Dependencies:
 * Go >= 1.7.1
